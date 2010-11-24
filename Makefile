@@ -1,20 +1,20 @@
 
 PROJECT  = newton
-SOURCES   = *.cc
+SOURCES   = *.c
 
 C_FLAGS   = -Wall -g -O2 $(INCDIR)
-LIBRARIES = -lm -lstdc++
+LIBRARIES = -lm -lstdc++ -lSDL
 
 SRCS = $(wildcard $(SOURCES))
-OBJS = $(SRCS:.cc=.o)
+OBJS = $(SRCS:.c=.o)
 
 all: $(PROJECT)
 
 $(PROJECT): .depend $(OBJS)
-	g++ -o $(PROJECT) $(OBJS) $(LIBRARIES)
+	gcc -o $(PROJECT) $(OBJS) $(LIBRARIES)
 
-%.o: %.cc .depend
-	g++ $(C_FLAGS) -c $< -o $@
+%.o: %.c .depend
+	gcc $(C_FLAGS) -c $< -o $@
 
 run: $(PROJECT)
 clean:
@@ -24,6 +24,6 @@ clean:
 .PHONY: all run clean
 
 .DEFAULT:
-	@g++ -M *.cc > .depend
+	@gcc -M *.c > .depend
 
 sinclude .depend
