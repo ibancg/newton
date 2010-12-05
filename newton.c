@@ -1,10 +1,26 @@
+// Newton - Modeling and simulation of planetary motion
+// Copyright 1999-2010, Ibán Cereijo Graña <ibancg at gmail dot com>
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
 
 #include "mode13h.h"
 
-#define calculations_per_plot 20 // Calculations between two representations
+#define calculations_per_plot 5 // Calculations between two representations
 #define max_nbodies 10 // Maximum body number
 #define G 6.6743e-11 // gravitational constant
 #define sqr_M(x)   ((x)*(x))
@@ -32,17 +48,16 @@ int createBody(body_t* body, double pox, double poy, double vox, double voy,
 
 int main(int argc, char* argv[]) {
 
-	//unsigned char *Virtual; // Pantalla virtual.
 	int nbodies = 0;
 	body_t body[max_nbodies];
 
 	double p1;
 	double t = 0.0; // time
-	int i, j, n = 0; // iteration variables
+	int i, j, k, n = 0; // iteration variables
 	body_t *bi, *bj;
-	unsigned char *v;
 	double x, y;
 	unsigned char done = 0;
+	unsigned char* v;
 
 	screen_t* screen = startGraph(1);
 
@@ -58,15 +73,17 @@ int main(int argc, char* argv[]) {
 	//	nbodies
 	//			+= createBody(&body[nbodies], 384400e3, 0.0, 0.0, 1022, 7.349e22, 0);
 
-	const double scale_factor = screen->h / 300.0; // 800000 Km height
-	const double delta_time = 1e-2; // Temporal calculus resolution
+	const double scale_factor = screen->h / 300.0; // 300 m height
+	const double delta_time = 2e-2; // Temporal calculus resolution
 	nbodies += createBody(&body[nbodies], 50.0, 40.0, -0.2, 0.2, 100.0 / G, 0);
-	nbodies += createBody(&body[nbodies], -150.0, -40.0, 0.3, -0.3, 100.0 / G,
+	nbodies += createBody(&body[nbodies], -150.0, -40.0, 0.2, -0.3, 100.0 / G,
 			0);
-	//		nbodies += createBody(&body[nbodies], 100.0, 0.0, -0.3, 1.0, 300.0 / G, 0);
+	//			nbodies += createBody(&body[nbodies], 50.0, -70.0, 0.2, 0.4, 300.0 / G, 0);
 
-	//	body_t* bodyref = &body[0];
-	body_t* bodyref = NULL;
+	sleep(2);
+
+	body_t* bodyref = &body[0];
+	//	body_t* bodyref = NULL;
 
 	const double scale_factor_x = scale_factor;
 	const double scale_factor_y = scale_factor
@@ -74,6 +91,7 @@ int main(int argc, char* argv[]) {
 	const unsigned int xc = screen->w / 2;
 	const unsigned int yc = screen->h / 2;
 
+	// color palette definition: yellow gradient
 	for (i = 0; i < 255; i++) {
 		defineColor(screen, i, i, i, i >> 2);
 	}
@@ -112,6 +130,7 @@ int main(int argc, char* argv[]) {
 		if (n++ == calculations_per_plot) {
 
 			// we darken the body path
+
 			for (j = 0, v = screen->pointer; j < screen->size; j++, v++) {
 				if (*v > 40) {
 					(*v)--;
@@ -122,7 +141,7 @@ int main(int argc, char* argv[]) {
 				x = body[i].px;
 				y = body[i].py;
 
-				if (bodyref != NULL) {
+				if (bodyref != NULL) { // relative motion
 					x -= bodyref->px;
 					y -= bodyref->py;
 				}
@@ -137,7 +156,7 @@ int main(int argc, char* argv[]) {
 		}
 
 		t += delta_time;
-		//		printf("t = %f s\n", t);
+		//				printf("t = %f s\n", t);
 
 	} while (!done);
 
