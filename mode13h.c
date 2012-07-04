@@ -132,6 +132,8 @@ unsigned char getPixel(screen_t* screen, int x, int y) {
 		//		SDL_UnlockSurface(screen);
 #   	endif
 	}
+
+	return 0;
 }
 
 void defineColor(screen_t* screen, unsigned char color_index, unsigned char r,
