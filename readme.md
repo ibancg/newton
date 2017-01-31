@@ -1,12 +1,12 @@
 
-DESCRIPTION
------------
+Description
+===========
 
 Modelling and simulation of planetary motion in C
 
 
-CODE DETAILS
-------------
+Code Details
+============
 
 The code is platform-dependent, as it uses some basic graphic routines.
 Originally this code was written for MS-DOS, using the protected mode and the
