@@ -1,5 +1,5 @@
 
-# Newton - Modelling and simulation of planetary motion in C
+# Newton - Modeling and simulation of planetary motion in C
 
 <img align="right" src="https://ibancg.github.io/images/newton_absolute_motion.png">
 
